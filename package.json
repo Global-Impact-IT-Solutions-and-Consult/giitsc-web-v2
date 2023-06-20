@@ -1,0 +1,23 @@
+{
+  "name": "giitsc-web",
+  "homepage": "https://www.giitsc.com/",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "NODE_ENV=production node server.js",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "babel-plugin-styled-components": "^2.0.7",
+    "bootstrap": "^5.2.3",
+    "framer-motion": "^8.5.4",
+    "gsap": "^3.11.4",
+    "next": "13.0.6",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "styled-components": "^5.3.6",
+    "three": "^0.149.0"
+  }
+}
