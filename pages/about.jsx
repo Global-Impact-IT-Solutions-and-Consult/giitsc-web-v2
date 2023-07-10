@@ -4,10 +4,10 @@ import AboutComponent from "../components/aboutComponent/AboutComponent";
 const About = () => {
   return (
     <>
-      <div>
+      {/* <div>
         <AboutComponent />
-      </div>
-      {/* <AboutComponent /> */}
+      </div> */}
+      <AboutComponent />
     </>
   );
 };
