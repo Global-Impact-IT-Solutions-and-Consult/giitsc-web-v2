@@ -7,7 +7,7 @@ export const Wrapper = styled.nav`
   height: ${(props) => (props.extendNav ? "100vh" : "86px")};
   /* background: ${(props) => (props.changeBg ? "#011729" : "#00000033")}; */
   /* background-color: #00000033; */
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: ${(props) => (props.changeBg ? "#011729" : "#00000033")};  ;
   display: flex;
   flex-direction: column;
   position: fixed;

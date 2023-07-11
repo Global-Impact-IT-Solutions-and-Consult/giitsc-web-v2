@@ -3,7 +3,6 @@ import styled from "styled-components";
 export const Wrapper = styled.div `
   // background: url("/images/ero.jpg");
   /* background-color: blue; */
-  height: 100vh;
   overflow-y: scroll;
   background-position: center; 
   background-repeat: no-repeat; 

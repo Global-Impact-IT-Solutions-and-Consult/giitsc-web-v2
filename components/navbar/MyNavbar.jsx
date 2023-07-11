@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Head from "next/head";
 import Image from "next/image";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 // styles
 import {
@@ -34,23 +34,31 @@ const MyNavbar = () => {
   const [dropdownMobile, setDropdownMobile] = useState(false);
   const [slideAnimate, setSlideAnimate] = useState(false);
 
-  const [changeBg, setChangeBg] = useState(true);
+  const [changeBg, setChangeBg] = useState(false);
   console.log("🚀 ~ file: MyNavbar.jsx:38 ~ MyNavbar ~ changeBg:", changeBg);
+
+  const changeBgHandler = useCallback((e) => {
+    console.log(window.scrollY);
+    if (window.scrollY >= screen.height) {
+      setChangeBg(true);
+    } else {
+      setChangeBg(false);
+    }
+  }, []);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       // browser code
-      const changeBgHandler = () => {
-        if (window.scrollY >= 90) {
-          setChangeBg(true);
-        } else {
-          setChangeBg(false);
-        }
-      };
-
-      window.addEventListener("scroll", changeBgHandler);
+      console.log({ window });
+      window.addEventListener("scroll", changeBgHandler, { passive: true });
     }
-  });
+
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("scroll", changeBgHandler, { passive: true });
+      }
+    };
+  }, []);
 
   // const { scrollYProgress } = useScroll();
 
@@ -76,10 +84,7 @@ const MyNavbar = () => {
         <title>Global Impact I.T Solutions & Consult</title>
         <meta name="description" content="Global Impact " />
         <link rel="icon" href="/logo.png" />
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-        ></link>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
       </Head>
       {/* Normal menu */}
       <InnerWrapper>
@@ -100,45 +105,27 @@ const MyNavbar = () => {
             >
               <NavbarLInk href="/">Home</NavbarLInk>
               <Dropdown dropdown={dropdown}>
-                <div
-                  className="dropdownbtn"
-                  onClick={() => setDropdown(!dropdown)}
-                >
+                <div className="dropdownbtn" onClick={() => setDropdown(!dropdown)}>
                   <span>Services</span>
                   <i class="fa fa-caret-down"></i>
                 </div>
                 <div className="dropdownMenu">
-                  <DropdownLInk
-                    onClick={() => setDropdown(false)}
-                    href="/mobile"
-                  >
+                  <DropdownLInk onClick={() => setDropdown(false)} href="/mobile">
                     Mobile Development
                   </DropdownLInk>
-                  <DropdownLInk
-                    onClick={() => setDropdown(false)}
-                    href="/networking"
-                  >
+                  <DropdownLInk onClick={() => setDropdown(false)} href="/networking">
                     Networking
                   </DropdownLInk>
-                  <DropdownLInk
-                    onClick={() => setDropdown(false)}
-                    href="/management"
-                  >
+                  <DropdownLInk onClick={() => setDropdown(false)} href="/management">
                     Project Management
                   </DropdownLInk>
-                  <DropdownLInk
-                    onClick={() => setDropdown(false)}
-                    href="/training"
-                  >
+                  <DropdownLInk onClick={() => setDropdown(false)} href="/training">
                     Training
                   </DropdownLInk>
                   <DropdownLInk onClick={() => setDropdown(false)} href="/web">
                     Web Development
                   </DropdownLInk>
-                  <DropdownLInk
-                    onClick={() => setDropdown(false)}
-                    href="/marketing"
-                  >
+                  <DropdownLInk onClick={() => setDropdown(false)} href="/marketing">
                     Digital Marketing
                   </DropdownLInk>
                 </div>
@@ -154,19 +141,9 @@ const MyNavbar = () => {
                 )}
               </HamburgerMobile> */}
             </LinkHolder>
-            <Hamburger onClick={onWebMenuClick}>
-              {slideAnimate ? (
-                <>&#10005;</>
-              ) : (
-                <Image src={menu} alt="logo" width="25" height="32" />
-              )}
-            </Hamburger>
+            <Hamburger onClick={onWebMenuClick}>{slideAnimate ? <>&#10005;</> : <Image src={menu} alt="logo" width="25" height="32" />}</Hamburger>
             <HamburgerMobile onClick={() => setExtendNav(!extendNav)}>
-              {extendNav ? (
-                <>&#10005;</>
-              ) : (
-                <Image src={menu} alt="logo" width="25" height="32" />
-              )}
+              {extendNav ? <>&#10005;</> : <Image src={menu} alt="logo" width="25" height="32" />}
             </HamburgerMobile>
           </RightInner>
         </Right>
@@ -180,10 +157,7 @@ const MyNavbar = () => {
               Home
             </NavbarLInkMobile>
             <DropdownMobile dropdownMobile={dropdownMobile}>
-              <div
-                className="dropdownbtnMobile"
-                onClick={() => setDropdownMobile(!dropdownMobile)}
-              >
+              <div className="dropdownbtnMobile" onClick={() => setDropdownMobile(!dropdownMobile)}>
                 <span>Services</span>
                 <i className="fa fa-caret-down"></i>
               </div>
@@ -191,45 +165,27 @@ const MyNavbar = () => {
                 <DropdownLInkMobile onClick={onMobileMenuClick} href="/mobile">
                   Mobile Development
                 </DropdownLInkMobile>
-                <DropdownLInkMobile
-                  onClick={onMobileMenuClick}
-                  href="/networking"
-                >
+                <DropdownLInkMobile onClick={onMobileMenuClick} href="/networking">
                   Networking
                 </DropdownLInkMobile>
-                <DropdownLInkMobile
-                  onClick={onMobileMenuClick}
-                  href="/management"
-                >
+                <DropdownLInkMobile onClick={onMobileMenuClick} href="/management">
                   Project Management
                 </DropdownLInkMobile>
-                <DropdownLInkMobile
-                  onClick={onMobileMenuClick}
-                  href="/training"
-                >
+                <DropdownLInkMobile onClick={onMobileMenuClick} href="/training">
                   Training
                 </DropdownLInkMobile>
                 <DropdownLInkMobile onClick={onMobileMenuClick} href="/web">
                   Web Development
                 </DropdownLInkMobile>
-                <DropdownLInkMobile
-                  onClick={onMobileMenuClick}
-                  href="/marketing"
-                >
+                <DropdownLInkMobile onClick={onMobileMenuClick} href="/marketing">
                   Digital Marketing
                 </DropdownLInkMobile>
               </div>
             </DropdownMobile>
-            <NavbarLInkMobile
-              onClick={() => setExtendNav(!extendNav)}
-              href="/about"
-            >
+            <NavbarLInkMobile onClick={() => setExtendNav(!extendNav)} href="/about">
               About us
             </NavbarLInkMobile>
-            <NavbarLInkMobile
-              onClick={() => setExtendNav(!extendNav)}
-              href="/contact"
-            >
+            <NavbarLInkMobile onClick={() => setExtendNav(!extendNav)} href="/contact">
               Contact
             </NavbarLInkMobile>
           </>
