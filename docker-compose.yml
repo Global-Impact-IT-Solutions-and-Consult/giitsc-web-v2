@@ -10,4 +10,4 @@ services:
         MKOBO_BASE_API_URL: ${MKOBO_BASE_API_URL}
     restart: always
     ports:
-      - 4000:3000
+      - 80:3000
