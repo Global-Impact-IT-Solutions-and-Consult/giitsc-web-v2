@@ -107,7 +107,7 @@ const MyNavbar = () => {
               <Dropdown dropdown={dropdown}>
                 <div className="dropdownbtn" onClick={() => setDropdown(!dropdown)}>
                   <span>Services</span>
-                  <i class="fa fa-caret-down"></i>
+                  <i className="fa fa-caret-down"></i>
                 </div>
                 <div className="dropdownMenu">
                   <DropdownLInk onClick={() => setDropdown(false)} href="/mobile">
