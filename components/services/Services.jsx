@@ -1,17 +1,15 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
+import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
+
 // styles
 import { Wrapper, CardHolder, CardPair } from "./Services.Styles";
 
 // widgets
 import ServiceCard from "../../widgets/serviceCard/ServiceCard";
 import UnderlineWidget from "../../widgets/underlineWidget/UnderlineWidget";
-
-// icons
-// import mobile from "../../public/services/pngs/mobile-development.png";
-// import network from "../../public/services/pngs/cyber-security.png";
-// import project from "../../public/services/pngs/development.png";
-// import training from "../../public/services/pngs/education.png";
-// import web from "../../public/services/pngs/coding.png";
-// import marketing from "../../public/services/pngs/bullhorn.png";
 
 // svgs
 import mobile from "../../public/services/svgs/mobile-development.svg";
@@ -22,12 +20,89 @@ import web from "../../public/services/svgs/coding.svg";
 import marketing from "../../public/services/svgs/bullhorn.svg";
 
 const Services = () => {
+  const [wpServices, setWpServices] = useState([]);
+
+  useEffect(() => {
+    async function fetchServices() {
+      const client = new ApolloClient({
+        uri: "http://localhost/wp/graphql",
+        cache: new InMemoryCache(),
+      });
+
+      const response = await client.query({
+        query: gql`
+          query unemployed {
+            services {
+              nodes {
+                services {
+                  summary
+                  title
+                  url
+                  icon {
+                    sourceUrl
+                  }
+                }
+              }
+            }
+          }
+        `,
+      });
+
+      const getServices = response.data.services.nodes.map(
+        (service) => service.services
+      );
+      setWpServices(getServices);
+    }
+
+    fetchServices();
+  }, []);
+
+  // useEffect(async () => {
+  //   const client = new ApolloClient({
+  //     uri: "http://localhost/wp/graphql",
+  //     cache: new InMemoryCache(),
+  //   });
+
+  //   const response = await client.query({
+  //     query: gql`
+  //       query unemployed {
+  //         services {
+  //           nodes {
+  //             services {
+  //               content
+  //               title
+  //               url
+  //             }
+  //           }
+  //         }
+  //       }
+  //     `,
+  //   });
+
+  //   const getServices = response.data.services.nodes.map(
+  //     (service) => service.services
+  //   );
+  //   setWpServices(getServices);
+  // }, [wpServices]);
+
   return (
     <Wrapper>
-      {/* <div className="heading">Services</div> */}
       <UnderlineWidget text={"Services"} />
       <CardHolder>
-        <ServiceCard
+        {wpServices.length > 0 && (
+          <>
+            {wpServices.map((service, i) => (
+              <ServiceCard
+                key={i}
+                icon={service.icon.sourceUrl}
+                title={service.title}
+                description={service.summary}
+                href={service.url}
+              />
+            ))}
+          </>
+        )}
+        {/* <ServiceCard
           icon={mobile}
           title={"Mobile Development"}
           description={
@@ -76,34 +151,6 @@ const Services = () => {
             "Digital marketing is the delivery of advertisements through digital channels like search engines, websites, social media, email, and mobile apps."
           }
           href={"/marketing"}
-        />
-        {/* <ServiceCard
-          icon={coach}
-          title={"Agile Coach"}
-          description={
-            "Make your teams more flexible, transparent, and efficient by aligning them with Agile values and concepts provided by our agile coaches"
-          }
-        />
-        <ServiceCard
-          icon={scrum}
-          title={"SCRUM Masters"}
-          description={
-            "Help your team succeed by getting help on a one-on-one basis or as a group from our SCRUM Masters"
-          }
-        />
-        <ServiceCard
-          icon={outsourcing}
-          title={"Outsourcing"}
-          description={
-            "We help you find the most qualified experts to build your projects"
-          }
-        />
-        <ServiceCard
-          icon={ai}
-          title={"AI"}
-          description={
-            "We specialize in various AI fields like Robotics, deep learning and machine learning"
-          }
         /> */}
       </CardHolder>
     </Wrapper>

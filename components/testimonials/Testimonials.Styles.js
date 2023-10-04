@@ -57,8 +57,8 @@ export const Content = styled.div`
   padding: 3rem 2rem;
   /* background: yellow; */
   display: flex;
-  justify-content: space-evenly;
-  gap: 9rem;
+  justify-content: center;
+  gap: 1rem;
   margin: 1rem;
   position: relative;
 

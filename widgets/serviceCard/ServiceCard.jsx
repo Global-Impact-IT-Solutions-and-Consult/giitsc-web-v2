@@ -8,9 +8,8 @@ const ServiceCard = ({ icon, title, description, href }) => {
     <Wrapper href={href}>
       <Top>
         <div className="icon">
-          <Image src={icon} alt="logo" />
+          <Image src={icon} alt="logo" width={38} height={38} />
         </div>
-        {/* <Image src={image} alt="logo" /> */}
       </Top>
       <Bottom>
         <div className="title">{title}</div>

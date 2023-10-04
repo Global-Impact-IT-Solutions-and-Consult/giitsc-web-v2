@@ -1,3 +1,9 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
+import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
+
 import React from "react";
 import Image from "next/image";
 
@@ -21,19 +27,74 @@ import nav from "../../public/icons/contact-us/nav.png";
 import dial from "../../public/icons/contact-us/dial.png";
 
 const ContactComponent = () => {
+  const [apiData, setApiData] = useState([]);
+
+  useEffect(() => {
+    async function fetchServices() {
+      const client = new ApolloClient({
+        uri: "http://localhost/wp/graphql",
+        cache: new InMemoryCache(),
+      });
+
+      const response = await client.query({
+        query: gql`
+          query unemployed {
+            footer(id: "158", idType: DATABASE_ID) {
+              footers {
+                address
+                company {
+                  link
+                  title
+                }
+                services {
+                  link
+                  title
+                }
+                socials {
+                  link
+                  title
+                }
+                copyright
+              }
+            }
+          }
+        `,
+      });
+
+      const getResponse = response.data.footer.footers;
+
+      setApiData(getResponse);
+    }
+
+    fetchServices();
+  }, []);
   return (
     <>
       <Wrapper>
         <Content>
           <Left>
             <LeftContent>
-              <div className="bigText">Talk to our Expert</div>
-              <div className="introText">
-                Have questions about pricing and mode of operations? <br /> Fill
-                out the form and we will be in touch directly.
-              </div>
+              <div className="bigText">{apiData.title}</div>
+              <div className="introText">{apiData.tag_line}</div>
               <div className="imageBox" />
               <div className="addressHolder">
+                {apiData.company?.map((item, i) => (
+                  <div key={i} className="address">
+                    <div className="name">HOUSTON TEXAS, USA</div>
+                    <div className="location">
+                      <div className="pair">
+                        <Image src={nav} alt="" width={15} />
+                        0103 Lansdale Dr, Houston, TX 77036, USA
+                      </div>
+                    </div>
+                    <div className="phone">
+                      <div className="pair">
+                        <Image src={dial} alt="" width={15} />
+                        +1713-518-6373
+                      </div>
+                    </div>
+                  </div>
+                ))}
                 <div className="address">
                   <div className="name">HOUSTON TEXAS, USA</div>
                   <div className="location">

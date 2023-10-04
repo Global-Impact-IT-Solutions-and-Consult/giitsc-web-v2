@@ -8,7 +8,7 @@ const OperationCard = ({ icon, title, description }) => {
     <Wrapper>
       <Top>
         <div className="icon">
-          <Image src={icon} alt="logo" />
+          <Image src={icon} alt="logo" width={29} height={29} />
         </div>
       </Top>
       <Bottom>

@@ -34,7 +34,7 @@ const Pricing = ({
             price={c1_price}
             description={c1_description}
           />
-          <PricingCard
+          {/* <PricingCard
             href={c2_href}
             title={c2_title}
             subText={c2_subText}
@@ -47,7 +47,7 @@ const Pricing = ({
             subText={c3_subText}
             price={c3_price}
             description={c3_description}
-          />
+          /> */}
         </Content>
       </Wrapper>
     </>

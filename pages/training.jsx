@@ -1,35 +1,89 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
+import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
+
 import React from "react";
 import ServicePage from "../components/servicePage/ServicePage";
 import trainingImg from "../public/images/servicePage/training.png";
 import Pricing from "../components/pricing/Pricing";
+import UnderlineWidget from "../widgets/underlineWidget/UnderlineWidget";
+
+// styles
+import { Content, Wrapper } from "../components/pricing/Pricing.Styles";
+import PricingCard from "../widgets/pricingCard/PricingCard";
 
 const training = () => {
+  const [apiData, setApiData] = useState([]);
+
+  useEffect(() => {
+    async function fetchServices() {
+      const client = new ApolloClient({
+        uri: "http://localhost/wp/graphql",
+        cache: new InMemoryCache(),
+      });
+
+      const response = await client.query({
+        query: gql`
+          query unemployed {
+            service(id: "25", idType: DATABASE_ID) {
+              services {
+                content
+                title
+                image {
+                  sourceUrl
+                }
+                pricing {
+                  description
+                  price
+                  title
+                  benefits {
+                    benefit
+                  }
+                }
+              }
+            }
+          }
+        `,
+      });
+
+      const getResponse = response.data.service.services;
+
+      setApiData(getResponse);
+    }
+
+    fetchServices();
+  }, []);
+
   return (
     <>
       <ServicePage
-        title={"Corporate Training"}
-        image={trainingImg}
-        description={
-          "GIITSC Corporate Training helps high-potential leaders and teams adopt new paradigms, implement new practices, and achieve competitive advantage and market success through strategic talent management. Our designation programs are the gold standard for proving knowledge and successfully implementing solutions to real-world talent and leadership challenges. GIITSC Corporate Training is designed to meet your organizational needs and preferences and is priced to encourage wide adoption. Courses can be tailored from half-day to two-day session, and can be delivered in-person or online with a live, master teacher. “Train the Trainer” options offer the ability to reach tens of thousands of employees. The result is the freedom to pair GIITSC content and faculty with your organization in the format and timeframe that best meets your needs."
-        }
+        title={apiData.title}
+        image={apiData.image?.sourceUrl}
+        description={apiData.content}
       />
-      <Pricing
-        c1_href="/"
-        c1_title={"Lite"}
-        c1_subText={"For individual with personal projects"}
-        c1_price={"₦50,000"}
-        c1_description={"We have over 5 packages to enable us help you better"}
-        c2_href="/"
-        c2_title={"Lite"}
-        c2_subText={"For individual with personal projects"}
-        c2_price={"₦120,000"}
-        c2_description={"We have over 5 packages to enable us help you better"}
-        c3_href="/"
-        c3_title={"Lite"}
-        c3_subText={"For individual with personal projects"}
-        c3_price={"₦180,000"}
-        c3_description={"We have over 5 packages to enable us help you better"}
-      />
+      <Wrapper>
+        <UnderlineWidget text={"Pricing"} />
+        <Content>
+          {apiData.pricing?.length <= 0 ? (
+            <span>No price list available yet</span>
+          ) : (
+            <>
+              {apiData.pricing?.map((item, i) => (
+                <PricingCard
+                  key={i}
+                  href={item.link}
+                  title={item.title}
+                  subText={item.description}
+                  price={item.price}
+                  description={[item.benefits]}
+                />
+              ))}
+            </>
+          )}
+        </Content>
+      </Wrapper>
     </>
   );
 };

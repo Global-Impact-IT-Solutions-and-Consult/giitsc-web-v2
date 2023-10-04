@@ -1,4 +1,10 @@
-import React, { useEffect, useRef } from "react";
+"use client";
+
+import { useEffect, useState, useRef } from "react";
+
+import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
+
+// import React, { useEffect,  } from "react";
 import * as THREE from "three";
 import { FlyControls } from "three/addons/controls/FlyControls.js";
 
@@ -104,24 +110,42 @@ const HeroSection = () => {
     }, []);
   }
 
+  const [apiData, setApiData] = useState([]);
+
+  useEffect(() => {
+    async function fetchServices() {
+      const client = new ApolloClient({
+        uri: "http://localhost/wp/graphql",
+        cache: new InMemoryCache(),
+      });
+
+      const response = await client.query({
+        query: gql`
+          query unemployed {
+            post(id: "5", idType: DATABASE_ID) {
+              title
+            }
+          }
+        `,
+      });
+
+      // const getResponse = response.data.operations.nodes.map(
+      //   (item) => item.operations
+      // );
+      setApiData(response.data.post.title);
+    }
+
+    fetchServices();
+  }, []);
+
   return (
     <Wrapper ref={containerRef}>
-      {/* <Overlay> */}
       <Content>
-        <motion.h1
-          className="my-3"
-          // initial={{ opacity: 0, scale: 0 }}
-          // animate={{
-          //   opacity: [0.5, 1, 0.5, 1],
-          //   scale: [1, 2, 1.2],
-          //   color: ["#fff", "#98eff9", "#74e6f7", "#fff"],
-          // }}
-          // transition={{ duration: 5 }}
-        >
-          Technology solutions for a smarter future
+        <motion.h1 className="my-3">
+          {/* Technology solutions for a smarter future */}
+          {apiData}
         </motion.h1>
       </Content>
-      {/* </Overlay> */}
     </Wrapper>
   );
 };

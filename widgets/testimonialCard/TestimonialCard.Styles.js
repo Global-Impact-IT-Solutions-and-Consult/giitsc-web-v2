@@ -51,7 +51,7 @@ export const Wrapper = styled.div`
     width: 50%;
     padding: 0 1rem;
     position: absolute;
-    margin-bottom: -14rem;
+    margin-bottom: -18rem;
     height: 50%;
     display: flex;
     flex-direction: column;

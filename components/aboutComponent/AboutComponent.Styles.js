@@ -252,3 +252,71 @@ export const StoryBody = styled.div`
     }
   }
 `;
+
+export const Left = styled.div`
+  /* background: yellow; */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: flex-start;
+
+  /* bigger display */
+  @media only screen and (min-width: 1441px) {
+    width: 40%;
+    gap: 0.5rem;
+    /* background-color: red; */
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+  }
+
+  // MOBILE
+  @media only screen and (max-width: 767px) {
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+
+  .imageBox {
+    width: 630px;
+    height: 430px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    margin-left: -1rem;
+    overflow: hidden;
+    /* background-color: red; */
+    width: 100%;
+    position: relative;
+
+    img {
+      object-fit: cover;
+    }
+
+    // TAB
+    @media only screen and (min-width: 768px) and (max-width: 991px) {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    // MOBILE
+    @media only screen and (max-width: 767px) {
+      /* width: 360px; */
+      width: 100%;
+      height: 215px;
+      margin: 0 auto;
+      /* margin-left: -1rem; */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      img {
+        object-fit: scale-down;
+      }
+    }
+  }
+`;

@@ -6,7 +6,7 @@ import { Wrapper, Top, Bottom } from "./TestimonialCard.Styles";
 // icon
 import quote from "../../public/icons/testimonials/qoute.png";
 
-const TestimonialCard = ({ image, name, review, float }) => {
+const TestimonialCard = ({ image, name, organization, review, float }) => {
   return (
     <Wrapper float={float}>
       <div className="icon">
@@ -19,7 +19,7 @@ const TestimonialCard = ({ image, name, review, float }) => {
         </div>
         <div className="bottomPair">
           <div className="name">{name}</div>
-          <div className="title">{name}</div>
+          <div className="title">{organization}</div>
         </div>
       </div>
       {/* <Top>

@@ -1,35 +1,89 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
+import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
+
 import React from "react";
 import ServicePage from "../components/servicePage/ServicePage";
 import mobileImg from "../public/images/servicePage/mobile.png";
 import Pricing from "../components/pricing/Pricing";
+import UnderlineWidget from "../widgets/underlineWidget/UnderlineWidget";
+
+// styles
+import { Content, Wrapper } from "../components/pricing/Pricing.Styles";
+import PricingCard from "../widgets/pricingCard/PricingCard";
 
 const mobile = () => {
+  const [apiData, setApiData] = useState([]);
+
+  useEffect(() => {
+    async function fetchServices() {
+      const client = new ApolloClient({
+        uri: "http://localhost/wp/graphql",
+        cache: new InMemoryCache(),
+      });
+
+      const response = await client.query({
+        query: gql`
+          query unemployed {
+            service(id: "18", idType: DATABASE_ID) {
+              services {
+                content
+                title
+                image {
+                  sourceUrl
+                }
+                pricing {
+                  description
+                  price
+                  title
+                  benefits {
+                    benefit
+                  }
+                }
+              }
+            }
+          }
+        `,
+      });
+
+      const getResponse = response.data.service.services;
+
+      setApiData(getResponse);
+    }
+
+    fetchServices();
+  }, []);
+
   return (
     <>
       <ServicePage
-        title={"Mobile Development"}
-        image={mobileImg}
-        description={
-          "Are you searching for any Mobile application consulting and development company, search no further because  you have found one of the leading mobile application development company in the world today. We develop word class mobile applications, we turn your ideas into a reality by meeting your expectations and beyond, nor matter the platforms or complexity of the project we are capable. We have development experts that are ever ready to help in providing you free consulting services before the kick off of the project, among the things we do first is to analyze the project requirement, goals and your budget, then we can help you match them with the most fit development technology that will guarantee your applications success. "
-        }
+        title={apiData.title}
+        image={apiData.image?.sourceUrl}
+        description={apiData.content}
       />
-      <Pricing
-        c1_href="/"
-        c1_title={"Lite"}
-        c1_subText={"For individual with personal projects"}
-        c1_price={"₦50,000"}
-        c1_description={"We have over 5 packages to enable us help you better"}
-        c2_href="/"
-        c2_title={"Lite"}
-        c2_subText={"For individual with personal projects"}
-        c2_price={"₦120,000"}
-        c2_description={"We have over 5 packages to enable us help you better"}
-        c3_href="/"
-        c3_title={"Lite"}
-        c3_subText={"For individual with personal projects"}
-        c3_price={"₦180,000"}
-        c3_description={"We have over 5 packages to enable us help you better"}
-      />
+      <Wrapper>
+        <UnderlineWidget text={"Pricing"} />
+        <Content>
+          {apiData.pricing?.length <= 0 ? (
+            <span>No price list available yet</span>
+          ) : (
+            <>
+              {apiData.pricing?.map((item, i) => (
+                <PricingCard
+                  key={i}
+                  href={item.link}
+                  title={item.title}
+                  subText={item.description}
+                  price={item.price}
+                  description={[item.benefits]}
+                />
+              ))}
+            </>
+          )}
+        </Content>
+      </Wrapper>
     </>
   );
 };

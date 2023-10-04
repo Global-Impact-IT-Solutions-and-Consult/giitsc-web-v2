@@ -1,35 +1,89 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
+import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
+
 import React from "react";
 import ServicePage from "../components/servicePage/ServicePage";
 import marketingImg from "../public/images/servicePage/marketing.png";
 import Pricing from "../components/pricing/Pricing";
+import UnderlineWidget from "../widgets/underlineWidget/UnderlineWidget";
+
+// styles
+import { Content, Wrapper } from "../components/pricing/Pricing.Styles";
+import PricingCard from "../widgets/pricingCard/PricingCard";
 
 const marketing = () => {
+  const [apiData, setApiData] = useState([]);
+
+  useEffect(() => {
+    async function fetchServices() {
+      const client = new ApolloClient({
+        uri: "http://localhost/wp/graphql",
+        cache: new InMemoryCache(),
+      });
+
+      const response = await client.query({
+        query: gql`
+          query unemployed {
+            service(id: "27", idType: DATABASE_ID) {
+              services {
+                content
+                title
+                image {
+                  sourceUrl
+                }
+                pricing {
+                  description
+                  price
+                  title
+                  benefits {
+                    benefit
+                  }
+                }
+              }
+            }
+          }
+        `,
+      });
+
+      const getResponse = response.data.service.services;
+
+      setApiData(getResponse);
+    }
+
+    fetchServices();
+  }, []);
+
   return (
     <>
       <ServicePage
-        title={"Digital Marketing"}
-        image={marketingImg}
-        description={
-          "At our tech website company, we believe that digital marketing is a crucial component of any business's success in today's digital age. From increasing brand awareness to generating leads and retaining customers, digital marketing can help businesses achieve their goals and stay competitive in the marketplace. That's why we offer a range of digital marketing services, including website design and development, SEO optimization, social media management, email marketing campaigns, and PPC advertising management. Our team of digital marketing experts takes a strategic approach to every project, starting with research and analysis to understand our clients' goals, target audience, and competitive landscape. We then create a customized digital marketing plan that is tailored to the unique needs and objectives of each client. Whether it's improving search engine rankings, building brand awareness on social media, or driving more traffic to a website, we use proven strategies and tactics to achieve results. Throughout the process, we prioritize communication and collaboration with our clients to ensure that their vision is brought to life."
-        }
+        title={apiData.title}
+        image={apiData.image?.sourceUrl}
+        description={apiData.content}
       />
-      <Pricing
-        c1_href="/"
-        c1_title={"Lite"}
-        c1_subText={"For individual with personal projects"}
-        c1_price={"₦50,000"}
-        c1_description={"We have over 5 packages to enable us help you better"}
-        c2_href="/"
-        c2_title={"Lite"}
-        c2_subText={"For individual with personal projects"}
-        c2_price={"₦120,000"}
-        c2_description={"We have over 5 packages to enable us help you better"}
-        c3_href="/"
-        c3_title={"Lite"}
-        c3_subText={"For individual with personal projects"}
-        c3_price={"₦180,000"}
-        c3_description={"We have over 5 packages to enable us help you better"}
-      />
+      <Wrapper>
+        <UnderlineWidget text={"Pricing"} />
+        <Content>
+          {apiData.pricing?.length <= 0 ? (
+            <span>No price list available yet</span>
+          ) : (
+            <>
+              {apiData.pricing?.map((item, i) => (
+                <PricingCard
+                  key={i}
+                  href={item.link}
+                  title={item.title}
+                  subText={item.description}
+                  price={item.price}
+                  description={[item.benefits]}
+                />
+              ))}
+            </>
+          )}
+        </Content>
+      </Wrapper>
     </>
   );
 };

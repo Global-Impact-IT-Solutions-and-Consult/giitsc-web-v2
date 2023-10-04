@@ -7,7 +7,7 @@ const ValueCard = ({ icon, text }) => {
   return (
     <Wrapper>
       <Top>
-        <Image src={icon} alt="logo" height="0" />
+        <Image src={icon} alt="logo" width={40} height={40} />
       </Top>
       <Bottom>
         <div className="text">{text}</div>

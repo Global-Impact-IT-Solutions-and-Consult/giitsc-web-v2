@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const Wrapper = styled.a `
+export const Wrapper = styled.a`
   background: #fff;
   color: var(--theme-color);
   box-shadow: 0px 4px 24px rgba(0, 0, 0, 0.15);
@@ -8,14 +8,15 @@ export const Wrapper = styled.a `
   padding: 1rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: start;
+  /* align-items: start; */
   cursor: pointer;
   margin: 0 0.3rem;
   background: #ffffff;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.11);
   border-radius: 7px;
   width: 307px;
-  min-height: 220px;
+  height: 435px;
   transition: all 300ms ease-in;
   text-align: left;
   text-decoration: none;
@@ -51,7 +52,7 @@ export const Wrapper = styled.a `
   }
 `;
 
-export const Top = styled.div `
+export const Top = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -89,7 +90,7 @@ export const Top = styled.div `
   }
 `;
 
-export const Bottom = styled.div `
+export const Bottom = styled.div`
   /* background-color: blue; */
   display: flex;
   flex-direction: column;

@@ -13,7 +13,7 @@ const ServicePage = ({ title, image, description }) => {
         <Main>
           <Left>
             <div className="imageBox" image={image}>
-              <Image src={image} alt="#" />
+              <Image src={image} alt="#" fill={true} />
             </div>
             {/* <div className="text">
               We use the latest technologies and industry best practices to

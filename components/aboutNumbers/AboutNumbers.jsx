@@ -1,14 +1,53 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
+import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
+
 import React from "react";
 
 // styles
 import { Wrapper, Content, Top, Bottom } from "./AboutNumbers.Styles";
 
 const AboutNumbers = () => {
+  const [apiData, setApiData] = useState([]);
+
+  useEffect(() => {
+    async function fetchServices() {
+      const client = new ApolloClient({
+        uri: "http://localhost/wp/graphql",
+        cache: new InMemoryCache(),
+      });
+
+      const response = await client.query({
+        query: gql`
+          query unemployed {
+            aboutNumbers {
+              nodes {
+                aboutNumbers {
+                  clientBase
+                  partners
+                  completedProjects
+                  content
+                }
+              }
+            }
+          }
+        `,
+      });
+
+      setApiData(response.data.aboutNumbers.nodes[0].aboutNumbers);
+    }
+
+    fetchServices();
+  }, []);
+
   return (
     <Wrapper>
       <Content>
         <Top>
-          Since 2013,Global Impact I.T Solutions & Consult (GIITSC) has remained
+          {apiData.content}
+          {/* Since 2013,Global Impact I.T Solutions & Consult (GIITSC) has remained
           on the cutting edge of technology while building a reputation as a
           trusted resource across Nigeria, USA and China.
           <br />
@@ -22,19 +61,19 @@ const AboutNumbers = () => {
           <br />
           At GITSC, we have the resources to handle all your I.T needs,
           providing the peace of mind you need to concentrate on running your
-          business.
+          business. */}
         </Top>
         <Bottom>
           <div className="pair">
-            <div className="pairTop">12+</div>
+            <div className="pairTop">{apiData.completedProjects}</div>
             <div className="pairBottom">Completed Projects</div>
           </div>
           <div className="pair">
-            <div className="pairTop">15k+</div>
+            <div className="pairTop">{apiData.clientBase}</div>
             <div className="pairBottom">Client Base</div>
           </div>
           <div className="pair">
-            <div className="pairTop">100+</div>
+            <div className="pairTop">{apiData.partners}</div>
             <div className="pairBottom">Partners</div>
           </div>
         </Bottom>

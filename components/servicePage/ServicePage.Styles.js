@@ -172,6 +172,7 @@ export const Left = styled.div`
     overflow: hidden;
     /* background-color: red; */
     width: 100%;
+    position: relative;
 
     img {
       object-fit: cover;
